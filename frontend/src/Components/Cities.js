@@ -1,14 +1,14 @@
 const cities = [
-    { city: "Lublin", country: "Polska" },
-    { city: "Warszawa", country: "Polska" },
-    { city: "Lizbona", country: "Portugalia" },
-    { city: "Praga", country: "Czechy" },
-    { city: "Paryż", country: "Francja" },
-    { city: "Rzym", country: "Włochy" },
-    { city: "Barcelona", country: "Hiszpania" },
-    { city: "Londyn", country: "Wielka Brytania" },
-    { city: "Madryt", country: "Hiszpania" },
-    { city: "Amsterdam", country: "Holandia" }
+    { city: "Lublin", country: "Poland" },
+    { city: "Warszawa", country: "Poland" },
+    { city: "Lisboa", country: "Portugal" },
+    { city: "Prague", country: "Czech Republic" },
+    { city: "Paris", country: "France" },
+    { city: "Rome", country: "Italy" },
+    { city: "Porto", country: "Portugal" },
+    { city: "Londyn", country: "England" },
+    { city: "Madrid", country: "Spain" },
+    { city: "Amsterdam", country: "Netherlands" }
 ];
 
 export default cities;

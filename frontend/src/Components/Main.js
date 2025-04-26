@@ -1,16 +1,61 @@
 import React, { useState } from 'react';
 import cities from './Cities.js';
+import { WiDaySunny, WiCloud, WiRain, WiSnow } from 'react-icons/wi';
+
+const API_KEY = "f6dadb12be22e7a0413e198644260381";
+
+function getWeatherIcon(description) {
+    switch (description.toLowerCase()) {
+        case "sunny":
+            return <WiDaySunny size={48} />;
+        case "partly cloudy":
+        case "cloudy":
+            return <WiCloud size={48} />;
+        case "rain":
+        case "light rain":
+            return <WiRain size={48} />;
+        case "snow":
+            return <WiSnow size={48} />;
+        default:
+            return <WiCloud size={48} />; 
+    }
+}
 function Main(){
     const [selectedCity, setSelectedCity] = useState("");
+    const [weatherData, setWeatherData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleCityChange = (event) => {
         setSelectedCity(event.target.value);
     };
-    
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log("Wybrane miasto:", selectedCity);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!selectedCity) return;
+
+        setLoading(true);
+        setError(null);
+        setWeatherData(null);
+
+        try {
+            const response = await fetch(
+                `http://api.weatherstack.com/current?access_key=${API_KEY}&query=${selectedCity}`
+            );
+            const data = await response.json();
+
+            if (data.error) {
+                setError(data.error.info);
+            } else {
+                setWeatherData(data);
+            }
+        } catch (err) {
+            setError("Wystąpił błąd podczas pobierania danych.");
+        } finally {
+            setLoading(false);
+        }
     };
+
     return(
         <div className="main flex flex-col items-center justify-center">
             <h4 className="mb-5">Sprawdź dzisiejszą pogodę</h4>
@@ -34,7 +79,20 @@ function Main(){
                         Sprawdź
                     </button>
                 </form>
+                </div>
+            {loading && <p className="mt-6 text-gray-600">Ładowanie pogody...</p>}
+
+            {error && <p className="mt-6 text-red-500">{error}</p>}
+
+            {weatherData && (
+            <div className="mt-8 text-center flex flex-col items-center">
+                {getWeatherIcon(weatherData.current.weather_descriptions[0])}
+                <h5 className="text-xl font-bold">{weatherData.location.name}</h5>
+                <p className="text-lg">{weatherData.current.weather_descriptions[0]}</p>
+                <p className="text-lg">Temperatura: {weatherData.current.temperature}°C</p>
+                <p className="text-lg">Wilgotność: {weatherData.current.humidity}%</p>
             </div>
+            )}  
         </div>
     );
 }
