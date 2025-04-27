@@ -30,7 +30,7 @@ function Main(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         setLoading(true);
         setError(null);
         setWeatherData(null);
@@ -41,11 +41,11 @@ function Main(){
                 return;
             }
             const response = await fetch('http://localhost:3001/weather', {
-                method: 'POST', // Zmieniamy na POST
+                method: 'POST', 
                 headers: {
-                    'Content-Type': 'application/json', // Informujemy backend o formacie danych
+                    'Content-Type': 'application/json', 
                 },
-                body: JSON.stringify({ city: selectedCity }), // Wysyłamy miasto jako JSON
+                body: JSON.stringify({ city: selectedCity }), 
             });
     
             const data = await response.json();
