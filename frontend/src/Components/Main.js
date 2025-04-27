@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import cities from './Cities.js';
 import { WiDaySunny, WiCloud, WiRain, WiSnow } from 'react-icons/wi';
 
-const API_KEY = "f6dadb12be22e7a0413e198644260381";
-
 function getWeatherIcon(description) {
     switch (description.toLowerCase()) {
         case "sunny":
@@ -32,18 +30,26 @@ function Main(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!selectedCity) return;
-
+        
         setLoading(true);
         setError(null);
         setWeatherData(null);
 
         try {
-            const response = await fetch(
-                `http://api.weatherstack.com/current?access_key=${API_KEY}&query=${selectedCity}`
-            );
+            if(selectedCity === "") {
+                setError("Nie wybrano miasta.");
+                return;
+            }
+            const response = await fetch('http://localhost:3001/weather', {
+                method: 'POST', // Zmieniamy na POST
+                headers: {
+                    'Content-Type': 'application/json', // Informujemy backend o formacie danych
+                },
+                body: JSON.stringify({ city: selectedCity }), // Wysyłamy miasto jako JSON
+            });
+    
             const data = await response.json();
-
+    
             if (data.error) {
                 setError(data.error.info);
             } else {
