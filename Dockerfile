@@ -1,28 +1,35 @@
-FROM node:18-slim AS stage1
+FROM node:18-alpine AS base
+
+FROM base AS stage1
 
 LABEL org.opencontainers.image.authors="Ewa Górska s99544@pollub.edu.pl"
 
-WORKDIR /app
+WORKDIR /app/frontend
 
 COPY ./frontend/package.json ./frontend/package-lock.json ./
 RUN npm install
 
-COPY ./frontend /app/
+COPY ./frontend ./
 
 RUN npm run build
 
-FROM node:18-slim AS stage2
+FROM base AS stage2
 
-COPY --from=stage1 /app /app
-
-WORKDIR /app
+WORKDIR /app/backend  
 
 COPY ./backend/package.json ./backend/package-lock.json ./
 RUN npm install
 
-COPY ./backend /app/
+COPY ./backend ./
+
+COPY --from=stage1 /app/frontend/build /app/frontend/build
+
+RUN apk add --no-cache curl
+
+EXPOSE 3001
+
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:3001/ || exit 1
 
 
-EXPOSE 3000
-
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

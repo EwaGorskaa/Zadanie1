@@ -12,7 +12,7 @@ console.log('Ewa Górska');
 console.log('Serwer nasłuchuje na porcie: ' + port);
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
 app.post('/weather', async (req, res) => {
     const { city } = req.body;
@@ -36,6 +36,10 @@ app.post('/weather', async (req, res) => {
         console.error(err);
         return res.status(500).json({ error: { info: 'Wystąpił błąd podczas pobierania danych.' } });
     }
+});
+app.get('/', (req, res) => {
+    const indexPath = path.join(__dirname, 'frontend', 'build', 'index.html');
+    res.sendFile(indexPath);
 });
 
 app.listen(port);
