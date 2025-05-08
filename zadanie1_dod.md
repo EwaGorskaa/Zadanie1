@@ -22,5 +22,5 @@
 
 - Sprawdzenie manifestu, czy obraz na pewno jest wieloarchitekturowy
   ```
-  docker buildx imagetools inspect docker.io/ewagorskaa/repository_gorska:zadanie1_eg
+  docker buildx imagetools inspect docker.io/ewagorskaa/repository_gorska:zadanie1_eg_ssh
   ```
