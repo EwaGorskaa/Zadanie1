@@ -16,10 +16,25 @@
 - Uruchomienie kontenera (pull z repo):  
   
   ```
-  docker run -p 3001:3001 docker.io/ewagorskaa/repository_gorska:zadanie1_eg_ssh
+  docker run -p 3001:3001 --name chmurkaapp_ssh docker.io/ewagorskaa/repository_gorska:zadanie1_eg_ssh
   ```
 
 - Sprawdzenie manifestu, czy obraz na pewno jest wieloarchitekturowy
   ```
   docker buildx imagetools inspect docker.io/ewagorskaa/repository_gorska:zadanie1_eg_ssh
+  ```
+
+- Sprawdzenie liczby warstw obrazu:
+  ```
+  docker history docker.io/ewagorskaa/repository_gorska:zadanie1_eg_ssh
+  ```
+
+- Sprawdznie rozmiaru kontenera: 
+  ```
+  docker image ls ewagorskaa/repository_gorska:zadanie1_eg_ssh
+  ```
+
+- Sprawdzenie logów kontenera:
+  ```
+  docker logs chmurkaapp_ssh
   ```
