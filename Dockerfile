@@ -58,7 +58,7 @@ RUN npm install
 COPY --from=stage1 /app/backend ./
 
 # skopiowanie zbudowanego frontendu do katalogu backendu
-COPY --from=stage2 /app/frontend/build /app/backend/build
+COPY --from=stage2 /app/frontend/build /app/backend/public
 
 # zainstalowanie curla do healthchecka
 RUN apk add --no-cache curl
