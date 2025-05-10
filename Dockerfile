@@ -2,43 +2,73 @@
 
 FROM node:18-alpine AS base
 
+# stage1 - klonowanie repo
 FROM base AS stage1
 
+# dodanie metadanych o autorze zgodnie z OCI
 LABEL org.opencontainers.image.authors="Ewa Górska s99544@pollub.edu.pl"
 
-WORKDIR /app/frontend
+# ustawienie katalogu roboczego
+WORKDIR /app
 
+# instalowanie narzędzi do SSH, GIT oraz tworzenie katalogu .ssh i dodanie klucza SSH
 RUN apk add --no-cache git openssh-client && \
 mkdir -p ~/.ssh && chmod 700 ~/.ssh && \
 ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-RUN --mount=type=ssh git clone git@github.com:EwaGorskaa/Zadanie1.git ./
+# klonowanie repozytorium z GitHub za pomocą SSH
+RUN --mount=type=ssh git clone git@github.com:EwaGorskaa/Zadanie1.git ./ && \ 
+rm -rf ./.git
 
-COPY ./frontend/package.json ./frontend/package-lock.json ./
-RUN npm install
 
-COPY ./frontend ./
-
-RUN npm run build
-
+# stage2 - budowa frontendu
 # syntax=docker/dockerfile:1.2
 FROM base AS stage2
 
-WORKDIR /app/backend  
+# ustawienie katalogu roboczego
+WORKDIR /app/frontend
 
-COPY ./backend/package.json ./backend/package-lock.json ./
+# skopiowanie plików konfiguracyjnych z repo
+COPY --from=stage1 /app/frontend/package.json /app/frontend/package-lock.json ./
+
+# instalowanie zależności frontendu
 RUN npm install
 
-COPY ./backend ./
+# skopiowanie kodów źródłowych frontendu
+COPY --from=stage1 /app/frontend ./
 
-COPY --from=stage1 /app/frontend/build /app/frontend/build
+# budowa frontendu
+RUN npm run build
 
+
+# stage3 - budowa backendu
+# syntax=docker/dockerfile:1.2
+FROM base AS stage3
+
+# ustawienie katalogu roboczego
+WORKDIR /app/backend  
+
+# skopiowanie plików konfiguracyjnych z repo
+COPY --from=stage1 /app/backend/package.json /app/backend/package-lock.json ./
+
+# instalowanie zależności backendu
+RUN npm install
+
+# skopiowanie kodów źródłowych backendu
+COPY --from=stage1 /app/backend ./
+
+# skopiowanie zbudowanego frontendu do katalogu backendu
+COPY --from=stage2 /app/frontend/build /app/backend/build
+
+# zainstalowanie curla do healthchecka
 RUN apk add --no-cache curl
 
+# wystawienie portu 
 EXPOSE 3001
 
+# healthcheck
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:3001/ || exit 1
 
-
+# uruchomienie serwera
 CMD ["node", "server.js"]

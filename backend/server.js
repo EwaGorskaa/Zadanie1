@@ -12,7 +12,7 @@ console.log('Ewa Górska');
 console.log('Serwer nasłuchuje na porcie: ' + port);
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/weather', async (req, res) => {
     const { city } = req.body;
