@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.2
 
-FROM node:18-alpine AS base
+FROM node:22-alpine AS base
 
 # stage1 - klonowanie repo
 FROM base AS stage1
