@@ -1,13 +1,14 @@
+require('dotenv').config()
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const fetch = require('node-fetch'); 
+const fetch = require('node-fetch');
 const app = express();
 app.use(express.json());
 const port = 3001;
-const API_KEY = "f6dadb12be22e7a0413e198644260381"; 
+const API_KEY = process.env.API_KEY;
 
-console.log('Data uruchomienia serwera:' + new Date().toLocaleString());
+console.log('Data uruchomienia serwera: ' + new Date().toLocaleString('pl-PL', { timeZone: 'Europe/Warsaw' }));
 console.log('Ewa Górska');
 console.log('Serwer nasłuchuje na porcie: ' + port);
 
