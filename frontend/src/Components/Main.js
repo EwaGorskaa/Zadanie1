@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import cities from './Cities.js';
+// Import predefiniowanych miast
+import cities from './Cities.js'; 
 import { WiDaySunny, WiCloud, WiRain, WiSnow } from 'react-icons/wi';
 
+// Funkcja do wyświetlania inkony pogody na podstawie opisu
 function getWeatherIcon(description) {
     switch (description.toLowerCase()) {
         case "sunny":
@@ -19,15 +21,18 @@ function getWeatherIcon(description) {
     }
 }
 function Main(){
+    // Hooki use state 
     const [selectedCity, setSelectedCity] = useState("");
     const [weatherData, setWeatherData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // Obsługa zmiany selecta
     const handleCityChange = (event) => {
         setSelectedCity(event.target.value);
     };
 
+    // Obsługa wysłania formularza
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -40,6 +45,7 @@ function Main(){
                 setError("Nie wybrano miasta.");
                 return;
             }
+            // Wysłanie zapytania do backendu
             const response = await fetch('http://localhost:3001/weather', {
                 method: 'POST', 
                 headers: {
