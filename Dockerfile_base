@@ -12,7 +12,7 @@ WORKDIR /app/frontend
 COPY ./frontend/package.json ./frontend/package-lock.json ./
 
 # instalowanie zależności frontendu
-RUN npm install
+RUN npm install 
 
 # skopiowanie plików źródłowych frontendu
 COPY ./frontend ./
