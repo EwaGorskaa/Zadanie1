@@ -5,10 +5,11 @@
   2. "Metadata-action" deklaruje adres gdzie obraz ma zostać opublikowany w GHCR i generuje tag
   3. Instalacje w "Set up QUEMU" i "set up Buildx" umożliwiają budowę obrazu wieloarchitekturowego
   4. Krok "Setup SSH agent" umożliwia uwierzytelnienie przy korzystaniu z --mount=type=ssh podczas budowania obrazu 
-  5. Wykorzystuje "cache-from" i "cache-to" do wykorzystania cache eksportera registry i backendu registry w trybie max
-  6. Plik Dockerfile nazywa się Dockerfile dlatego "file: " zostało pominięte
-  7. Przesyła obraz do GHCR
-  8. Wykonuje skan CVE przy pomocy Trivy z exit-code: 1, jeśli wystąpią "severity: CRITICAL,HIGH"
+  5. Logowanie do dockerhub, aby można było pobrać dane cache
+  6. Wykorzystuje "cache-from" i "cache-to" do wykorzystania cache eksportera registry i backendu registry w trybie max
+  7. Plik Dockerfile nazywa się Dockerfile dlatego "file: " zostało pominięte
+  8. Przesyła obraz do GHCR
+  9. Wykonuje skan CVE przy pomocy Trivy z exit-code: 1, jeśli wystąpią "severity: CRITICAL,HIGH"
 
 - tagowanie obrazów: 
   1. semver - dla tagów w formacie "v*"
