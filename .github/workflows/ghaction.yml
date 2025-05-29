@@ -51,7 +51,7 @@ jobs:
         tags: ${{ steps.metadata.outputs.tags }}
 
     - name: Install Trivy
-      uses: aquasecurity/trivy-action@v0.13.0
+      uses: aquasecurity/trivy-action@v0.42.0
       
     - name: Scan with Trivy
       run: |
