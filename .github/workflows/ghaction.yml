@@ -40,7 +40,6 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
 
-
     - name: Login to GHCR
       uses: docker/login-action@v3
       with:
@@ -57,9 +56,9 @@ jobs:
         push: true
         ssh: default 
         cache-from: |
-          type=registry,ref=ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/repository_gorska:cache
+          type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/repository_gorska:cache
         cache-to: |
-          type=registry,ref=ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/repository_gorska:cache,mode=max
+          type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/repository_gorska:cache,mode=max
         tags: ${{ steps.metadata.outputs.tags }}
 
     - name: Scan built image with Trivy
