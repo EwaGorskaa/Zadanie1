@@ -59,6 +59,7 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
+        ssh: default 
         cache-from: |
           type=registry,ref=ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/repository_gorska:cache
         cache-to: |
