@@ -62,17 +62,14 @@ jobs:
           type=registry,ref=ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/repository_gorska:cache,mode=max
         tags: ${{ steps.metadata.outputs.tags }}
 
-    - name: Install Trivy
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget
-        wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.1_Linux-64bit.deb
-        sudo dpkg -i trivy_0.50.1_Linux-64bit.deb
-      
-    - name: Scan with Trivy
-      run: |
-        trivy image \
-        --exit-code 1 \
-        --severity HIGH,CRITICAL \
-        ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/repository_gorska@${{ steps.build.outputs.digest }}
- 
+    - name: Scan built image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ghcr.io/${{ vars.DOCKERHUB_USERNAME }}/repository_gorska@${{ steps.build.outputs.digest }}
+        format: table
+        exit-code: 1
+        ignore-unfixed: true
+        severity: CRITICAL,HIGH
+      env:
+        TRIVY_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+        TRIVY_PASSWORD: ${{ secrets.GHCR_PAT }}
