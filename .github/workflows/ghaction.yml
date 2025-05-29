@@ -10,6 +10,10 @@ jobs:
   multi_arch_build:
     name: Build, tag and push multi-arch Docker image 
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
 
     steps:
     - name: Checkout repo 
